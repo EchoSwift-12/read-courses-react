@@ -1,28 +1,35 @@
-import { createContext, useEffect } from "react"
+import { createContext, useEffect, useState } from "react"
 
-const coursesContext = createContext()
+const coursesContext = createContext({
+  allCourses: [],
+})
 
-const CoursesContextProvider = ({children}) => {
+const CoursesContextProvider = ({ children }) => {
+
+  const [allCourses, setAllCourses] = useState([])
 
 
   const getAllCourses = async () => {
     const response = await fetch('http://localhost:8000/courses', {
       method: "GET",
-      headers : {
+      headers: {
         "Content-Type": "application/json"
       }
     })
 
     const data = await response.json()
-    console.log(data)
+    // console.log(data)
+    // console.log(data)
+    setAllCourses(data)
   }
+
 
   useEffect(() => {
     getAllCourses()
-  },[])
+  }, [])
 
   return <>
-    <coursesContext.Provider value={{}}>
+    <coursesContext.Provider value={{ allCourses }}>
       {children}
     </coursesContext.Provider>
   </>
